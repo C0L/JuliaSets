@@ -12,13 +12,7 @@ void distribute();
 //}
 
 int main(int argc, char ** argv) {
-  int rank;
-  int uprocs;
-  int nprocs;
-  int x_grid;
-  int y_grid;
-
-  parse_cmds(argc, argv, &x_grid, &y_grid, &uprocs);
+  parse_cmds(argc, argv);
 
   MPI_Init(&argc, &argv);  
 
