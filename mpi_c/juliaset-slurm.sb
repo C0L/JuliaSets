@@ -1,0 +1,17 @@
+#!/bin/bash
+#SBATCH --job-name="Julia Set"
+#SBATCH --output="juliaset.%j.%N.out"
+#SBATCH --partition=compute
+#SBATCH --nodes=3
+#SBATCH --ntasks 12
+#SBATCH --export=ALL
+#SBATCH -t 00:04:00
+#SBATCH -A csd453
+
+ module purge 
+ module load slurm 
+ module load cpu
+ module load aocc
+ module load openmpi/4.0.4
+
+srun --mpi=pmi2 -n 12 --cpu-bind=rank ./juliaset

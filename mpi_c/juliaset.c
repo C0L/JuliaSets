@@ -4,9 +4,6 @@
 
 #include "cmdl.h"
 
-double complex grid[X][Y];
-uint8_t img[X][Y];
-
 double complex f(double complex z);
 void distribute();
 
@@ -21,18 +18,18 @@ int main(int argc, char ** argv) {
   int x_grid;
   int y_grid;
 
-//  parseCmds(argc, argv, &x_grid, &y_grid, &uprocs)
+  parse_cmds(argc, argv, &x_grid, &y_grid, &uprocs);
 
-  MPI(&argc, &argv);  
+  MPI_Init(&argc, &argv);  
 
   // TODO Parse nprocs
   MPI_Comm_size(MPI_COMM_WORLD, &nprocs);
   // TODO create rank
   MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
-  double complex grid = malloc(n * m * sizeof(double complex));
+//  double complex grid = malloc(n * m * sizeof(double complex));
   printf("THREAD\n");
-//  init();
+//  init_grid();
 
   MPI_Finalize();
 }
