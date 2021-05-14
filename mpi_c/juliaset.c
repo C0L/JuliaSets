@@ -1,25 +1,44 @@
 #include <complex.h>
-#include <stdio.h>
 #include <stdint.h>
+#include <mpi.h>
 
-#define R 1.5
-#define X 10000
-#define Y 10000
-#define MAX_ITER 1000
+#include "cmdl.h"
 
 double complex grid[X][Y];
 uint8_t img[X][Y];
 
-double complex f(double complex z) {
-    return z*z + (0.285 + 0.01*I);
-//  return z * z + (-0.8 * I);
-//  return z * z + (-0.8 + 0.156 * I);
-}
+double complex f(double complex z);
+void distribute();
+
+//double complex f(double complex z) {
+//    return z*z + (0.285 + 0.01*I);
+//}
 
 int main(int argc, char ** argv) {
+  int rank;
+  int uprocs;
+  int nprocs;
+  int x_grid;
+  int y_grid;
+
+//  parseCmds(argc, argv, &x_grid, &y_grid, &uprocs)
+
+  MPI(&argc, &argv);  
+
+  // TODO Parse nprocs
+  MPI_Comm_size(MPI_COMM_WORLD, &nprocs);
+  // TODO create rank
+  MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+
+  double complex grid = malloc(n * m * sizeof(double complex));
+  printf("THREAD\n");
+//  init();
+
+  MPI_Finalize();
+}
+/*
   for (int i = 0; i < X; ++i) {
     for (int j = 0; j < Y; ++j) {
-//      printf("init %d %d\n", i, j);
       int ci = i-(X/2);
       int cj = j-(Y/2);
 
@@ -37,9 +56,7 @@ int main(int argc, char ** argv) {
       double ci = cimag(grid[i][j]);
       double cp = R*R;
 
-//      printf("comp %d %d\n", i, j);
       while ((cr * cr + ci * ci) < cp && it < MAX_ITER) {
-//        printf("%f\n", (cr * cr + ci * ci));
         grid[i][j] = f(grid[i][j]);
         cr = creal(grid[i][j]);
         ci = cimag(grid[i][j]);
@@ -57,4 +74,4 @@ int main(int argc, char ** argv) {
   FILE * f = fopen("test0.dat", "wb");
   fwrite(img, sizeof(uint8_t), X * Y, f);
   fclose(f);
-}
+*/
