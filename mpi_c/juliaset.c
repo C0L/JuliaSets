@@ -3,21 +3,21 @@
 #include <mpi.h>
 
 #include "cmdl.h"
+#include "control.h"
 
 double complex f(double complex z);
 void distribute();
 
-//double complex f(double complex z) {
-//    return z*z + (0.285 + 0.01*I);
-//}
+control ctrl;
 
 int main(int argc, char ** argv) {
+  int rank;
   parse_cmds(argc, argv);
 
   MPI_Init(&argc, &argv);  
 
   // TODO Parse nprocs
-  MPI_Comm_size(MPI_COMM_WORLD, &nprocs);
+  MPI_Comm_size(MPI_COMM_WORLD, &ctrl.nprocs);
   // TODO create rank
   MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 

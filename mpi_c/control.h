@@ -1,5 +1,5 @@
-#ifndef cmdl_h
-#define cmdl_h
+#ifndef control_h
+#define control_h
 
 typedef struct control_t {
   int x_grid;

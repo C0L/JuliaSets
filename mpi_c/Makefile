@@ -1,16 +1,19 @@
 SHELL:=/bin/bash
 CFLAGS = -Wall -Werror
-CC = mpicc
+#CC = mpicc
 OBJS = juliaset.o cmdl.o
 
-all: juliaset
+all: mods juliaset
 
-juliaset: $(OBJS)
+
+mods:
 	module purge 
 	module load cpu 
 	module load aocc 
-	module load openmpi/4.0.4 
-	$(CC) $(CFLAGS) $(OBJS) -o $@
+	module load openmpi/4.0.4
+
+juliaset: $(OBJS)
+#	$(CC) $(CFLAGS) $(OBJS) -o $@
 
 clean:
 	rm -rf *.out *.o juliaset
