@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <getopt.h>
+#include <math.h>
 
 #include "control.h"
 

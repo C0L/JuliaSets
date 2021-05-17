@@ -1,67 +1,51 @@
 #include <complex.h>
 #include <stdint.h>
+#include <stdio.h>
 #include <mpi.h>
 
 #include "cmdl.h"
 #include "control.h"
-
-double complex f(double complex z);
-void distribute();
+#include "grid.h"
 
 control ctrl;
 
 int main(int argc, char ** argv) {
   int rank;
+  int max_nprocs;
+
   parse_cmds(argc, argv);
+  printf("%d\n", ctrl.y_grid);
+  printf("%d\n", ctrl.x_grid);
+  printf("%d\n", ctrl.nprocs);
+  printf("%d\n", ctrl.iters);
+
+  // Initialize the main grid -- this will be used for recovering the result
+  double complex * grid = (double complex *) malloc(ctrl.y_grid * ctrl.x_grid * sizeof(double complex));
+  uint8_t * img = (uint8_t *) malloc(ctrl.y_grid * ctrl.x_grid * sizeof(uint8_t));
 
   MPI_Init(&argc, &argv);  
-
   // TODO Parse nprocs
-  MPI_Comm_size(MPI_COMM_WORLD, &ctrl.nprocs);
+  MPI_Comm_size(MPI_COMM_WORLD, &max_nprocs);
+
+  if (ctrl.tprocs > max_nprocs) {
+    printf("Exceeded maximum processor count");
+    exit(-1);
+  }
+
   // TODO create rank
   MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
-//  double complex grid = malloc(n * m * sizeof(double complex));
-  printf("THREAD\n");
-//  init_grid();
+  double complex * pad = pad_alloc(rank);
+  uint8_t * img_seg = img_alloc(rank);
+
+  // Let just thread 0 perform the initialization
+  init(grid, rank);
+  distribute_ic(grid, rank, pad);
 
   MPI_Finalize();
 }
+
 /*
-  for (int i = 0; i < X; ++i) {
-    for (int j = 0; j < Y; ++j) {
-      int ci = i-(X/2);
-      int cj = j-(Y/2);
-
-      double ai = (ci == 0) ? 0 : ((ci + (X/2)) * (2*R))/X - R;
-      double aj = (cj == 0) ? 0 : ((cj + (Y/2)) * (2*R))/Y - R;
-
-      grid[i][j] = ai + aj * I;
-    }
-  }
-
-  for (int i = 0; i < X; ++i) {
-    for (int j = 0; j < Y; ++j) {
-      int it = 0;
-      double cr = creal(grid[i][j]);
-      double ci = cimag(grid[i][j]);
-      double cp = R*R;
-
-      while ((cr * cr + ci * ci) < cp && it < MAX_ITER) {
-        grid[i][j] = f(grid[i][j]);
-        cr = creal(grid[i][j]);
-        ci = cimag(grid[i][j]);
-        it++;
-      }
-
-      if (it == MAX_ITER) {
-        img[i][j] = (uint8_t) 0;
-      } else {
-        img[i][j] = (uint8_t) (it % 256);
-      }
-    }
-  }
-
   FILE * f = fopen("test0.dat", "wb");
   fwrite(img, sizeof(uint8_t), X * Y, f);
   fclose(f);

@@ -5,10 +5,14 @@ typedef struct control_t {
   int x_grid;
   int y_grid;
   int nprocs;
+  int tprocs;
   int iters;
   int cutoff;
-  // TODO add eqn
+  int region;
+  double escape;
 
 } control;
+
+extern control ctrl;
 
 #endif

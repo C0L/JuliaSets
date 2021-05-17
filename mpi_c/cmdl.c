@@ -3,31 +3,36 @@
 static struct option options[] = {
   {"i", required_argument, 0, 'i'},
   {"n", required_argument, 0, 'n'},
-  {"x", required_argument, 0, 'x'},
-  {"y", required_argument, 0, 'y'}
+  {"s", required_argument, 0, 's'},
 };
-
-extern control ctrl;
 
 void parse_cmds(int argc, char ** argv) { 
   /* Parse command line options */
   int c;
-  while ((c = getopt_long(argc, argv, "n:x:y", options, NULL)) != -1) {
+  int isqrt;
+  float fsqrt;
+  while ((c = getopt_long(argc, argv, "s:n:i:", options, NULL)) != -1) {
     switch (c) {
-      case 'x':
+      case 's':
+        ctrl.y_grid = atoi(optarg);
         ctrl.x_grid = atoi(optarg);
         break;
-      case 'y':
-        ctrl.y_grid = atoi(optarg);
-        break;
       case 'n':
-        ctrl.nprocs = atoi(optarg);
+        fsqrt = sqrt((double) atoi(optarg));
+        isqrt = fsqrt;
+        if (isqrt != fsqrt) {
+          printf("nprocs is not square\n");
+          exit(-1);
+        }
+        ctrl.nprocs = isqrt;
+        ctrl.tprocs = atoit(optarg);
         break;
       case 'i':
         ctrl.iters = atoi(optarg);
         break; 
       default:
-        abort();
+        printf("Usage: juliaset [-i <iterations>] [-n <number procs>] [-s <x/y dim>]\n");
+        exit(-1);
     }
   }
 }
