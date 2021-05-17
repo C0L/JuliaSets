@@ -7,8 +7,7 @@ typedef struct control_t {
   int nprocs;
   int tprocs;
   int iters;
-  int cutoff;
-  int region;
+  double region;
   double escape;
 
 } control;

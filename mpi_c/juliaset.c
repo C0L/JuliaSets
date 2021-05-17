@@ -26,7 +26,7 @@ int main(int argc, char ** argv) {
   MPI_Init(&argc, &argv);  
   // TODO Parse nprocs
   MPI_Comm_size(MPI_COMM_WORLD, &max_nprocs);
-
+  printf("Init\n");
   if (ctrl.tprocs > max_nprocs) {
     printf("Exceeded maximum processor count");
     exit(-1);
@@ -34,19 +34,29 @@ int main(int argc, char ** argv) {
 
   // TODO create rank
   MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-
+  printf("Ranked\n");
   double complex * pad = pad_alloc(rank);
   uint8_t * img_seg = img_alloc(rank);
 
   // Let just thread 0 perform the initialization
+  printf("Init\n");
   init(grid, rank);
+  printf("Distribute IC\n");
   distribute_ic(grid, rank, pad);
+  printf("Simulate\n");
+  simulate(pad, img_seg, rank);
+  printf("Collate\n");
+  collate(img, img_seg, rank);
+  
+  free(pad);
+  free(img_seg);
 
   MPI_Finalize();
-}
 
-/*
   FILE * f = fopen("test0.dat", "wb");
-  fwrite(img, sizeof(uint8_t), X * Y, f);
+  fwrite(img, sizeof(uint8_t), ctrl.x_grid * ctrl.y_grid, f);
   fclose(f);
-*/
+  
+  free(grid);
+  free(img);
+}

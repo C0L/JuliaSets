@@ -1,7 +1,5 @@
 #include "grid.h"
 
-control ctrl;
-
 // Allows us to configure what is distributed to processors
 void init(double complex * grid, int rank) {
   if (rank == 0) {
@@ -65,24 +63,24 @@ void distribute_ic(complex double * grid, int rank, complex double * pad) {
     // MPI Send IC and copy direct for rank 0
     for (int p = 0; p < ctrl.tprocs; ++p) {
 
-      int ideal_x = ctrl.x_grid / p;
-      int ideal_y = ctrl.y_grid / p;
+      int ideal_x = ctrl.x_grid / ctrl.nprocs;
+      int ideal_y = ctrl.y_grid / ctrl.nprocs;
 
       int diff_x = (ctrl.nprocs * ideal_x) - ctrl.x_grid;
       int diff_y = (ctrl.nprocs * ideal_y) - ctrl.y_grid;
 
-      if (rank < diff_x) {
+      if (p < diff_x) {
         ideal_x++; 
       } 
 
-      if (rank % ctrl.nprocs < diff_y) {
+      if (p % ctrl.nprocs < diff_y) {
         ideal_y++; 
       }
  
       complex double * transfer_block = (complex double *) malloc(ideal_x * ideal_y * sizeof(complex double));
 
-      int global_x = (rank < diff_x ? rank * ideal_x : rank * (ideal_x + 1)) + (rank > diff_x ? rank * ideal_x : 0); 
-      int global_y = ((rank % ctrl.nprocs) < diff_y ? rank * ideal_y : (rank % ctrl.nprocs) * (ideal_y + 1)) + (rank > diff_y ? (rank % ctrl.nprocs) * ideal_y : 0);   
+      int global_x = (p < diff_x ? p * ideal_x : p * (ideal_x + 1)) + (p > diff_x ? p * ideal_x : 0); 
+      int global_y = ((p % ctrl.nprocs) < diff_y ? p * ideal_y : (p % ctrl.nprocs) * (ideal_y + 1)) + (p > diff_y ? (p % ctrl.nprocs) * ideal_y : 0);   
 
 
       for (int i = 0; i < ideal_x; ++i) {
@@ -106,6 +104,7 @@ void distribute_ic(complex double * grid, int rank, complex double * pad) {
 
         MPI_Wait(&send_ic_rq, &send_ic_st);
       }
+      free(transfer_block);
     }
   } else {
     int ideal_x = ctrl.x_grid / rank;
@@ -169,6 +168,73 @@ void simulate(complex double * pad, uint8_t * img_seg, int rank) {
   }
 }
 
-void collate() {
+void collate(uint8_t * img, uint8_t * img_seg, int rank) {
+  // Just recieve on proc 0 and copy its own img segment
+  if (rank != 0) {
+    int ideal_x = ctrl.x_grid / rank;
+    int ideal_y = ctrl.y_grid / rank;
 
+    int diff_x = (ctrl.nprocs * ideal_x) - ctrl.x_grid;
+    int diff_y = (ctrl.nprocs * ideal_y) - ctrl.y_grid;
+
+    if (rank < diff_x) {
+      ideal_x++; 
+    } 
+
+    if (rank % ctrl.nprocs < diff_y) {
+      ideal_y++; 
+    }
+
+    // Processor 0 initializes itself manually
+    MPI_Request send_ic_rq;
+    MPI_Status send_ic_st;
+
+    MPI_Isend(img_seg, ideal_x*ideal_y, MPI_DOUBLE_COMPLEX, 0, rank, MPI_COMM_WORLD, &send_ic_rq);
+
+    MPI_Wait(&send_ic_rq, &send_ic_st);
+  } else {
+    for (int p = 0; p < ctrl.tprocs; ++p) {
+      int ideal_x = ctrl.x_grid / ctrl.nprocs;
+      int ideal_y = ctrl.y_grid / ctrl.nprocs;
+
+      int diff_x = (ctrl.nprocs * ideal_x) - ctrl.x_grid;
+      int diff_y = (ctrl.nprocs * ideal_y) - ctrl.y_grid;
+
+      if (p < diff_x) {
+        ideal_x++; 
+      } 
+
+      if (p % ctrl.nprocs < diff_y) {
+        ideal_y++; 
+      }
+ 
+      uint8_t * transfer_img = (uint8_t *) malloc(ideal_x * ideal_y * sizeof(uint8_t));
+
+      int global_x = (p < diff_x ? p * ideal_x : p * (ideal_x + 1)) + (p > diff_x ? p * ideal_x : 0); 
+      int global_y = ((p % ctrl.nprocs) < diff_y ? p * ideal_y : (p % ctrl.nprocs) * (ideal_y + 1)) + (p > diff_y ? (p % ctrl.nprocs) * ideal_y : 0);   
+
+      if (p == 0) {
+        for (int i = 0; i < ideal_x; ++i) {
+          for (int j = 0; j < ideal_y; ++j) {
+            *(img + (i + global_x) + (j + global_y) * ctrl.x_grid) = *(img_seg + i + j*ideal_x);
+          }
+        }
+      } else {
+        // MPI Receive
+        MPI_Request rec_ic_rq;
+        MPI_Status rec_ic_st;
+
+        MPI_Irecv(transfer_img, ideal_x*ideal_y, MPI_DOUBLE_COMPLEX, p, 0, MPI_COMM_WORLD, &rec_ic_rq);
+
+        MPI_Wait(&rec_ic_rq, &rec_ic_st);
+
+        for (int i = 0; i < ideal_x; ++i) {
+          for (int j = 0; j < ideal_y; ++j) {
+            *(img + (i + global_x) + (j + global_y) * ctrl.x_grid) = *(transfer_img+ i + j*ideal_x);
+          }
+        }
+      }
+      free(transfer_img);
+    }      
+  }
 }

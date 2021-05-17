@@ -1,7 +1,7 @@
 SHELL:=/bin/bash
 CFLAGS = -Wall -Werror -lm
 CC = mpicc
-OBJS = juliaset.o cmdl.o grid.o
+OBJS = juliaset.o cmdl.o grid.o map.o
 
 all: juliaset
 
