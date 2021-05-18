@@ -92,10 +92,13 @@ void distribute_ic(complex double * grid, int rank, complex double * pad) {
 
       //int global_x = (p < diff_x ? p * ideal_x : p * (ideal_x + 1)) + (p >= diff_x ? p * ideal_x : 0); 
       //int global_y = ((p % ctrl.nprocs) < diff_y ? p * ideal_y : (p % ctrl.nprocs) * (ideal_y + 1)) + (p >= diff_y ? (p % ctrl.nprocs) * ideal_y : 0);   
-      int global_x = ((p % ctrl.nprocs) * ideal_x);
-      int global_y = ((p % ctrl.nprocs) * ideal_y);
+//      int global_x = ((p % ctrl.nprocs) * ideal_x);
+//      int global_y = ((p % ctrl.nprocs) * ideal_y);
       //(p < diff_x ? p * ideal_x : p * (ideal_x + 1)) + (p >= diff_x ? p * ideal_x : 0); 
       //int global_y = ((p % ctrl.nprocs) < diff_y ? p * ideal_y : (p % ctrl.nprocs) * (ideal_y + 1)) + (p >= diff_y ? (p % ctrl.nprocs) * ideal_y : 0);   
+
+      int global_x = ((p % ctrl.nprocs) * ideal_x);
+      int global_y = ((p / ctrl.nprocs) * ideal_y);
 
 
       printf("Globals %d,%d\n", global_x, global_y);
@@ -218,9 +221,9 @@ void collate(uint8_t * img, uint8_t * img_seg, int rank) {
 
       //int global_x = (p < diff_x ? p * ideal_x : diff_x * (ideal_x + 1)) + (p > diff_x ? (p - diff_y) * ideal_x : 0); 
       //int global_y = ((p % ctrl.nprocs) < diff_y ? p * ideal_y : diff_y * (ideal_y + 1)) + (p > diff_y ? ((p % ctrl.nprocs) - diff_y) * ideal_y : 0);   
-      //
+      
       int global_x = ((p % ctrl.nprocs) * ideal_x);
-      int global_y = ((p % ctrl.nprocs) * ideal_y);
+      int global_y = ((p / ctrl.nprocs) * ideal_y);
 
       if (p == 0) {
         for (int i = 0; i < ideal_x; ++i) {
