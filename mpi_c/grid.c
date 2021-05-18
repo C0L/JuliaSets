@@ -101,11 +101,11 @@ void distribute_ic(complex double * grid, int rank, complex double * pad) {
       int global_y = ((p / ctrl.nprocs) * ideal_y);
 
 
-      printf("Globals %d,%d\n", global_x, global_y);
+      printf("%d Globals %d,%d\n", rank, global_x, global_y);
 
       for (int i = 0; i < ideal_x; ++i) {
         for (int j = 0; j < ideal_y; ++j) {
-          *(transfer_block + i + j*ideal_x) = *(grid + (i + global_x) + (j+global_y) * ctrl.x_grid);
+          *(transfer_block + i + j * ideal_x) = *(grid + (i + global_x) + (j + global_y) * ctrl.x_grid);
         }
       }
 
@@ -113,7 +113,7 @@ void distribute_ic(complex double * grid, int rank, complex double * pad) {
       if (p == 0) {
         for (int i = 0; i < ideal_x; ++i) {
           for (int j = 0; j < ideal_y; ++j) {
-            *(pad + i + j*ideal_x) = *(transfer_block + i + j*ideal_x);
+            *(pad + i + j * ideal_x) = *(transfer_block + i + j * ideal_x);
           }
         }
       } else {
@@ -122,8 +122,8 @@ void distribute_ic(complex double * grid, int rank, complex double * pad) {
       free(transfer_block);
     }
   } else {
-    int ideal_x = ctrl.x_grid / rank;
-    int ideal_y = ctrl.y_grid / rank;
+    int ideal_x = ctrl.x_grid / ctrl.nprocs;
+    int ideal_y = ctrl.y_grid / ctrl.nprocs;
 
     int diff_x = (ctrl.nprocs * ideal_x) - ctrl.x_grid;
     int diff_y = (ctrl.nprocs * ideal_y) - ctrl.y_grid;
@@ -135,6 +135,7 @@ void distribute_ic(complex double * grid, int rank, complex double * pad) {
     if (rank % ctrl.nprocs < diff_y) {
       ideal_y++; 
     }
+
     MPI_Status rec_ic_st;
     MPI_Recv(pad, ideal_x*ideal_y, MPI_DOUBLE_COMPLEX, 0, 0, MPI_COMM_WORLD, &rec_ic_st);
   }
@@ -180,8 +181,8 @@ void simulate(complex double * pad, uint8_t * img_seg, int rank) {
 void collate(uint8_t * img, uint8_t * img_seg, int rank) {
   // Just recieve on proc 0 and copy its own img segment
   if (rank != 0) {
-    int ideal_x = ctrl.x_grid / rank;
-    int ideal_y = ctrl.y_grid / rank;
+    int ideal_x = ctrl.x_grid / ctrl.nprocs;
+    int ideal_y = ctrl.y_grid / ctrl.nprocs;
 
     int diff_x = (ctrl.nprocs * ideal_x) - ctrl.x_grid;
     int diff_y = (ctrl.nprocs * ideal_y) - ctrl.y_grid;
@@ -228,22 +229,18 @@ void collate(uint8_t * img, uint8_t * img_seg, int rank) {
       if (p == 0) {
         for (int i = 0; i < ideal_x; ++i) {
           for (int j = 0; j < ideal_y; ++j) {
-            *(img + (i + global_x) + (j + global_y) * ctrl.x_grid) = *(img_seg + i + j*ideal_x);
+            *(img + (i + global_x) + (j + global_y) * ctrl.x_grid) = *(img_seg + i + j * ideal_x);
           }
         }
       } else {
         // MPI Receive
-//        MPI_Request rec_ic_rq;
         MPI_Status rec_ic_st;
 
         MPI_Recv(transfer_img, ideal_x*ideal_y, MPI_UNSIGNED_CHAR, p, 0, MPI_COMM_WORLD, &rec_ic_st);
 
-        //MPI_Wait(&rec_ic_rq, &rec_ic_st);
-
         for (int i = 0; i < ideal_x; ++i) {
           for (int j = 0; j < ideal_y; ++j) {
             *(img + (i + global_x) + (j + global_y) * ctrl.x_grid) = *(transfer_img + i + j * ideal_x);
-            //*(img) = *(transfer_img + i + j*ideal_x);
           }
         }
       }
