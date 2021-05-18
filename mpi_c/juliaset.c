@@ -50,19 +50,17 @@ int main(int argc, char ** argv) {
   collate(img, img_seg, rank);
   printf("Complete %d\n", rank);
 
-//  free(pad);
-//  free(img_seg);
+  free(pad);
+  free(img_seg);
 
-//  if (rank == 0) {
-//   free(img); 
-//    free(grid); 
-//  }
+  if (rank == 0) {
+    FILE * f = fopen("test0.dat", "wb");
+    fwrite(img, sizeof(uint8_t), ctrl.x_grid * ctrl.y_grid, f);
+    fclose(f);
 
-//  MPI_Finalize();
-//  FILE * f = fopen("test0.dat", "wb");
-//  fwrite(img, sizeof(uint8_t), ctrl.x_grid * ctrl.y_grid, f);
-//  fclose(f);
-  
-//  free(grid);
-//  free(img);
+    free(img); 
+    free(grid); 
+  }
+
+  MPI_Finalize();
 }
