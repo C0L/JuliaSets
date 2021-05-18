@@ -196,9 +196,6 @@ void collate(uint8_t * img, uint8_t * img_seg, int rank) {
     }
 
     // Processor 0 initializes itself manually
-//    MPI_Request send_ic_rq;
-//    MPI_Status send_ic_st;
-
     MPI_Send(img_seg, ideal_x*ideal_y, MPI_UNSIGNED_CHAR, 0, 0, MPI_COMM_WORLD);
 
 //    MPI_Wait(&send_ic_rq, &send_ic_st);
@@ -210,11 +207,11 @@ void collate(uint8_t * img, uint8_t * img_seg, int rank) {
       int diff_x = (ctrl.nprocs * ideal_x) - ctrl.x_grid;
       int diff_y = (ctrl.nprocs * ideal_y) - ctrl.y_grid;
 
-      if (p < diff_x) {
+      if (p % ctrl.nprocs < diff_x) {
         ideal_x++; 
       } 
 
-      if (p % ctrl.nprocs < diff_y) {
+      if (p / ctrl.nprocs < diff_y) {
         ideal_y++; 
       }
  
