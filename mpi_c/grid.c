@@ -73,6 +73,8 @@ void distribute_ic(complex double * grid, int rank, complex double * pad) {
       int ideal_x = ctrl.x_grid / ctrl.nprocs;
       int ideal_y = ctrl.y_grid / ctrl.nprocs;
 
+      printf("Initial ideals %d,%d\n", ideal_x, ideal_y);
+
       int diff_x = (ctrl.nprocs * ideal_x) - ctrl.x_grid;
       int diff_y = (ctrl.nprocs * ideal_y) - ctrl.y_grid;
 
@@ -86,9 +88,17 @@ void distribute_ic(complex double * grid, int rank, complex double * pad) {
  
       complex double * transfer_block = (complex double *) malloc(ideal_x * ideal_y * sizeof(complex double));
 
-      int global_x = (p < diff_x ? p * ideal_x : p * (ideal_x + 1)) + (p > diff_x ? p * ideal_x : 0); 
-      int global_y = ((p % ctrl.nprocs) < diff_y ? p * ideal_y : (p % ctrl.nprocs) * (ideal_y + 1)) + (p > diff_y ? (p % ctrl.nprocs) * ideal_y : 0);   
+      printf("Diff %d,%d\n", diff_x, diff_y);
 
+      //int global_x = (p < diff_x ? p * ideal_x : p * (ideal_x + 1)) + (p >= diff_x ? p * ideal_x : 0); 
+      //int global_y = ((p % ctrl.nprocs) < diff_y ? p * ideal_y : (p % ctrl.nprocs) * (ideal_y + 1)) + (p >= diff_y ? (p % ctrl.nprocs) * ideal_y : 0);   
+      int global_x = ((p % ctrl.nprocs) * ideal_x);
+      int global_y = ((p % ctrl.nprocs) * ideal_y);
+      //(p < diff_x ? p * ideal_x : p * (ideal_x + 1)) + (p >= diff_x ? p * ideal_x : 0); 
+      //int global_y = ((p % ctrl.nprocs) < diff_y ? p * ideal_y : (p % ctrl.nprocs) * (ideal_y + 1)) + (p >= diff_y ? (p % ctrl.nprocs) * ideal_y : 0);   
+
+
+      printf("Globals %d,%d\n", global_x, global_y);
 
       for (int i = 0; i < ideal_x; ++i) {
         for (int j = 0; j < ideal_y; ++j) {
@@ -104,13 +114,7 @@ void distribute_ic(complex double * grid, int rank, complex double * pad) {
           }
         }
       } else {
-        //MPI_Request send_ic_rq;
-        //MPI_Status send_ic_st;
-
         MPI_Send(transfer_block, ideal_x*ideal_y, MPI_DOUBLE_COMPLEX, p, 0, MPI_COMM_WORLD);
-        //MPI_Isend(transfer_block, ideal_x*ideal_y, MPI_DOUBLE_COMPLEX, p, 0, MPI_COMM_WORLD, &send_ic_rq);
-
-        //MPI_Wait(&send_ic_rq, &send_ic_st);
       }
       free(transfer_block);
     }
@@ -128,15 +132,8 @@ void distribute_ic(complex double * grid, int rank, complex double * pad) {
     if (rank % ctrl.nprocs < diff_y) {
       ideal_y++; 
     }
- 
-     // MPI Receive
-   // MPI_Request rec_ic_rq;
     MPI_Status rec_ic_st;
-
-    //MPI_Irecv(pad, ideal_x*ideal_y, MPI_DOUBLE_COMPLEX, 0, 0, MPI_COMM_WORLD, &rec_ic_rq);
-
     MPI_Recv(pad, ideal_x*ideal_y, MPI_DOUBLE_COMPLEX, 0, 0, MPI_COMM_WORLD, &rec_ic_st);
-    //MPI_Wait(&rec_ic_rq, &rec_ic_st);
   }
 }
 
@@ -219,8 +216,11 @@ void collate(uint8_t * img, uint8_t * img_seg, int rank) {
  
       uint8_t * transfer_img = (uint8_t *) malloc(ideal_x * ideal_y * sizeof(uint8_t));
 
-      int global_x = (p < diff_x ? p * ideal_x : diff_x * (ideal_x + 1)) + (p > diff_x ? (p - diff_y) * ideal_x : 0); 
-      int global_y = ((p % ctrl.nprocs) < diff_y ? p * ideal_y : diff_y * (ideal_y + 1)) + (p > diff_y ? ((p % ctrl.nprocs) - diff_y) * ideal_y : 0);   
+      //int global_x = (p < diff_x ? p * ideal_x : diff_x * (ideal_x + 1)) + (p > diff_x ? (p - diff_y) * ideal_x : 0); 
+      //int global_y = ((p % ctrl.nprocs) < diff_y ? p * ideal_y : diff_y * (ideal_y + 1)) + (p > diff_y ? ((p % ctrl.nprocs) - diff_y) * ideal_y : 0);   
+      //
+      int global_x = ((p % ctrl.nprocs) * ideal_x);
+      int global_y = ((p % ctrl.nprocs) * ideal_y);
 
       if (p == 0) {
         for (int i = 0; i < ideal_x; ++i) {
