@@ -1,0 +1,351 @@
+25000
+25000
+5
+1000
+Init
+Ranked
+Init 0
+Construct IC
+25000
+25000
+5
+1000
+Init
+Ranked
+Init 7
+Distribute IC 7
+25000
+25000
+5
+1000
+Init
+Ranked
+Init 3
+Distribute IC 3
+25000
+25000
+5
+1000
+25000
+25000
+5
+1000
+Init
+25000
+25000
+5
+1000
+Init
+Ranked
+25000
+25000
+5
+1000
+Init
+Ranked
+Init 1
+Distribute IC 1
+25000
+25000
+5
+1000
+Init
+Ranked
+Init 2
+Distribute IC 2
+25000
+25000
+5
+1000
+Init
+Ranked
+Init 5
+Distribute IC 5
+Init
+Ranked
+Init 4
+Distribute IC 4
+Ranked
+Init 6
+Distribute IC 6
+Init 8
+Distribute IC 8
+25000
+25000
+5
+1000
+Init
+Ranked
+25000
+25000
+5
+1000
+Init
+Ranked
+Init 19
+Distribute IC 19
+25000
+25000
+5
+1000
+Init
+Ranked
+25000
+25000
+5
+1000
+Init
+Ranked
+Init 21
+Distribute IC 21
+Init 22
+Distribute IC 22
+25000
+25000
+5
+1000
+Init
+Ranked
+Init 15
+Distribute IC 15
+25000
+25000
+5
+1000
+Init
+Ranked
+Init 18
+Distribute IC 18
+25000
+25000
+5
+1000
+Init
+Ranked
+Init 23
+Distribute IC 23
+25000
+25000
+5
+1000
+Init
+25000
+25000
+5
+1000
+Init
+Ranked
+Init 20
+Distribute IC 20
+25000
+25000
+5
+1000
+Init
+Ranked
+Init 10
+Distribute IC 10
+Ranked
+25000
+25000
+5
+1000
+Init
+Ranked
+Init 11
+Distribute IC 11
+25000
+25000
+5
+1000
+Init
+Ranked
+Init 24
+Distribute IC 24
+25000
+25000
+5
+1000
+Init
+Ranked
+Init 12
+Distribute IC 12
+Init 17
+Distribute IC 17
+25000
+25000
+5
+1000
+Init
+Ranked
+Init 13
+Distribute IC 13
+25000
+25000
+5
+1000
+Init
+Ranked
+Init 14
+Distribute IC 14
+Init 9
+Distribute IC 9
+25000
+25000
+5
+1000
+Init
+Ranked
+Init 16
+Distribute IC 16
+Distribute IC 0
+Initial ideals 5000,5000
+Diff 0,0
+0 Globals 0,0
+Initial ideals 5000,5000
+Diff 0,0
+0 Globals 5000,0
+Simulate 1
+Initial ideals 5000,5000
+Diff 0,0
+0 Globals 10000,0
+Simulate 2
+Initial ideals 5000,5000
+Diff 0,0
+0 Globals 15000,0
+Simulate 3
+Initial ideals 5000,5000
+Diff 0,0
+0 Globals 20000,0
+Simulate 4
+Initial ideals 5000,5000
+Diff 0,0
+0 Globals 0,5000
+Simulate 5
+Initial ideals 5000,5000
+Diff 0,0
+0 Globals 5000,5000
+Collate 4
+Simulate 6
+Initial ideals 5000,5000
+Diff 0,0
+0 Globals 10000,5000
+Simulate 7
+Initial ideals 5000,5000
+Diff 0,0
+0 Globals 15000,5000
+Simulate 8
+Initial ideals 5000,5000
+Diff 0,0
+0 Globals 20000,5000
+Collate 5
+Simulate 9
+Initial ideals 5000,5000
+Diff 0,0
+0 Globals 0,10000
+Simulate 10
+Initial ideals 5000,5000
+Diff 0,0
+0 Globals 5000,10000
+Simulate 11
+Initial ideals 5000,5000
+Diff 0,0
+0 Globals 10000,10000
+Simulate 12
+Initial ideals 5000,5000
+Diff 0,0
+0 Globals 15000,10000
+Collate 10
+Collate 9
+Simulate 13
+Initial ideals 5000,5000
+Diff 0,0
+0 Globals 20000,10000
+Simulate 14
+Initial ideals 5000,5000
+Diff 0,0
+0 Globals 0,15000
+Initial ideals 5000,5000
+Diff 0,0
+0 Globals 5000,15000
+Simulate 15
+Simulate 16
+Initial ideals 5000,5000
+Diff 0,0
+0 Globals 10000,15000
+Collate 14
+Initial ideals 5000,5000
+Diff 0,0
+0 Globals 15000,15000
+Simulate 17
+Simulate 18
+Initial ideals 5000,5000
+Diff 0,0
+0 Globals 20000,15000
+Collate 15
+Simulate 19
+Initial ideals 5000,5000
+Diff 0,0
+0 Globals 0,20000
+Collate 3
+Collate 1
+Simulate 20
+Initial ideals 5000,5000
+Diff 0,0
+0 Globals 5000,20000
+Simulate 21
+Initial ideals 5000,5000
+Diff 0,0
+0 Globals 10000,20000
+Collate 20
+Collate 19
+Simulate 22
+Initial ideals 5000,5000
+Diff 0,0
+0 Globals 15000,20000
+Simulate 23
+Initial ideals 5000,5000
+Diff 0,0
+0 Globals 20000,20000
+Simulate 24
+Simulate 0
+Collate 0
+Collate 24
+Complete 1
+Collate 2
+Complete 2
+Complete 3
+Complete 4
+Complete 5
+Collate 21
+Collate 23
+Collate 8
+Collate 7
+Collate 22
+Collate 12
+Collate 11
+Collate 16
+Collate 13
+Collate 6
+Complete 6
+Complete 7
+Complete 8
+Complete 9
+Complete 10
+Collate 17
+Complete 11
+Complete 12
+Complete 13
+Complete 14
+Complete 15
+Complete 16
+Complete 17
+Collate 18
+Complete 18
+Complete 19
+Complete 20
+Complete 21
+Complete 22
+Complete 23
+Complete 24
+Complete 0

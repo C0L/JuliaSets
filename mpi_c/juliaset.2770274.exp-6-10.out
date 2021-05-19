@@ -1,2 +1,0 @@
-mpirun: Error: unknown option "--cpu-bind=rank"
-Type 'mpirun --help' for usage.
