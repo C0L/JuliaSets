@@ -1,3 +1,9 @@
+/*
+ * File:  control.h
+ * --------------------
+ *   Global atrributes for the entireity of the program (grid size, proc number, escape condition..)
+ */
+
 #ifndef control_h
 #define control_h
 

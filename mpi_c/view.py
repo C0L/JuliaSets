@@ -2,8 +2,8 @@ from PIL import Image
 import numpy as np
 from matplotlib import cm
 
-dat = np.fromfile('test0.dat', dtype = 'uint8')
-dat = dat.reshape((25000,25000))
+dat = np.fromfile('test.dat', dtype = 'uint8')
+dat = dat.reshape((10000,10000))
 #print(dat.mean())
 #x = dat[0:1000][0:1000]
 #print(type(x))

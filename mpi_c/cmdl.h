@@ -1,3 +1,9 @@
+/*
+ * File:  cmdl.h
+ * --------------------
+ *   parses command line arguments intro ctrl struct
+ */
+
 #ifndef cmdl_h
 #define cmdl_h
 
@@ -9,6 +15,6 @@
 
 #include "control.h"
 
-void parse_cmds(int argc, char ** argv); // TODO add function parse
+void parse_cmds(int argc, char ** argv); 
 
 #endif

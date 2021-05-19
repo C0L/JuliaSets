@@ -1,3 +1,9 @@
+/*
+ * File:  grid.h
+ * --------------------
+ *   defines actions to be taken on the simulation grid
+ */
+
 #ifndef grid_h
 #define grid_h
 
