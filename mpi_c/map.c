@@ -16,5 +16,6 @@
  *   returns: mapped complex value
  */
 double complex map(double complex z) {
-  return z*z + (0.285 + 0.01*I);
+  //return z*z + (0.285 + 0.01*I);
+  return z*z + (-.79 + .15*I);
 }
