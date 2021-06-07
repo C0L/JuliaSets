@@ -201,7 +201,7 @@ void distribute_ic(complex double * grid, int rank, complex double * pad) {
  *
  *   returns: void
  */
-void simulate(complex double * pad, uint8_t * img_seg, int rank) {
+void simulate(complex double * pad, uint8_t * img_seg, int rank, double c) {
   // Calculate the size of the current processors sub-grid
   int ideal_x = ctrl.x_grid / ctrl.nprocs;
   int ideal_y = ctrl.y_grid / ctrl.nprocs;
@@ -226,7 +226,7 @@ void simulate(complex double * pad, uint8_t * img_seg, int rank) {
       
       // Continue applying the complex map until abs(x+iy) > escape condition or exceed max iterations
       while ((cr * cr + ci * ci) < ctrl.escape && it < ctrl.iters) {
-        *(pad + i + j * ideal_x) = map(*(pad + i + j * ideal_x));
+        *(pad + i + j * ideal_x) = map(*(pad + i + j * ideal_x), c);
         cr = creal(*(pad + i + j * ideal_x));
         ci = cimag(*(pad + i + j * ideal_y));
         it++;

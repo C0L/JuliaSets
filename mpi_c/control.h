@@ -15,7 +15,11 @@ typedef struct control_t {
   int iters;
   double region;
   double escape;
-
+  int dynamic;
+  double min;
+  double max;
+  double delta;
+  char * ofile;
 } control;
 
 extern control ctrl;

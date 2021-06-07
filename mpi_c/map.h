@@ -10,6 +10,6 @@
 #include <complex.h>
 #include <math.h>
 
-double complex map(double complex z);
+double complex map(double complex z, double c);
 
 #endif

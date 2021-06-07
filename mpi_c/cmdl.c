@@ -12,7 +12,12 @@ static struct option options[] = {
   {"n", required_argument, 0, 'n'},
   {"s", required_argument, 0, 's'},
   {"r", required_argument, 0, 'r'},
-  {"e", required_argument, 0, 'e'}
+  {"e", required_argument, 0, 'e'},
+  {"d", required_argument, 0, 'd'},
+  {"l", optional_argument, 0, 'l'},
+  {"h", optional_argument, 0, 'h'},
+  {"t", optional_argument, 0, 't'},
+  {"o", required_argument, 0, 'o'}
 };
 
 /*
@@ -30,8 +35,24 @@ void parse_cmds(int argc, char ** argv) {
   int c;
   int isqrt;
   float fsqrt;
-  while ((c = getopt_long(argc, argv, "s:n:i:r:e:", options, NULL)) != -1) {
+  ctrl.dynamic = 0;
+  while ((c = getopt_long(argc, argv, "ds:n:i:r:e:l:h:t:o:", options, NULL)) != -1) {
     switch (c) {
+      case 'o':
+        ctrl.ofile = optarg;
+        break;
+      case 'd':
+        ctrl.dynamic = 1;
+        break;
+      case 'l':
+        ctrl.min = atof(optarg);
+        break;
+      case 'h':
+        ctrl.max = atof(optarg);
+        break;
+      case 't':
+        ctrl.delta = atof(optarg);
+        break;
       case 's':
         // Get the simulation grid size
         ctrl.y_grid = atoi(optarg);
