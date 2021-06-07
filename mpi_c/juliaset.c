@@ -54,6 +54,7 @@ int main(int argc, char ** argv) {
   if (!ctrl.dynamic) {
     ctrl.min = 0;
     ctrl.max = 0;
+    ctrl.delta = 1;
   }
 
   int frame = 0;
@@ -83,8 +84,6 @@ int main(int argc, char ** argv) {
       char buf[BUFSIZ];
       sprintf(buf, "%s_%d", ctrl.ofile, frame);
 
-      //strcpy(buf, ctrl.ofile);
-      //strcat(buf,num);
       FILE * f = fopen(buf, "wb");
       fwrite(img, sizeof(uint8_t), ctrl.x_grid * ctrl.y_grid, f);
       fclose(f);
