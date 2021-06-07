@@ -1,15 +1,19 @@
+'''
+Tool for processing binary jumps from juliaset.c
+'''
 from PIL import Image
 import numpy as np
+import glob
+import sys
+from natsort import natsorted
 from matplotlib import cm
 
-dat = np.fromfile('test.dat', dtype = 'uint8')
-dat = dat.reshape((10000,10000))
-#print(dat.mean())
-#x = dat[0:1000][0:1000]
-#print(type(x))
-#x = x.reshape((1000,1000))
-#.reshape((1000,1000))
-#ig = Image.fromarray(x.astype('uint8')).convert('P', palette = Image.WEB)
-#ig = Image.fromarray(np.uint8(cm.viridis(dat)*255))
-ig = Image.fromarray(np.uint8(cm.inferno(dat)*255))
-ig.save('test.png')
+input_file = glob.glob(sys.argv[1])
+input_size = int(sys.argv[2])
+
+for f in natsorted(input_file):
+  print(f)
+  dat = np.fromfile(f, dtype = 'uint8')
+  dat = dat.reshape((input_size,input_size))
+  ig = Image.fromarray(np.uint8(cm.inferno(dat)*255))
+  ig.save(f + '.png')
