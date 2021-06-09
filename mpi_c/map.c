@@ -26,13 +26,13 @@
 }*/
 
 /* USED FOR STATIC GENERATION */
-//double complex map(double complex z, double c) {
-//  return z*z + 0.355534 - .337292*I;
-//}
+double complex map(double complex z, double c) {
+  return z*z + 0.355534 - .337292*I;
+}
 
 
 /* USED FOR DYNAMIC GENERATION */
-double complex map(double complex z, double c) {
-  return z*z + .7885*cexp(I*c);
-}
+//double complex map(double complex z, double c) {
+//  return z*z + .7885*cexp(I*c);
+//}
 
