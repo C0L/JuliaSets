@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --job-name="Julia Set"
-#SBATCH --output="juliaset_pscale.out"
+#SBATCH --output="juliaset.pscale.out"
 #SBATCH --partition=compute
 #SBATCH --nodes=32
 #SBATCH --ntasks 1024
